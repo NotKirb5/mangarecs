@@ -1,0 +1,17 @@
+.coverthumbnail{
+  width:30%;
+  height:30%;
+  display:block;
+}
+
+.mangasuggest{
+  display: block;   /* prevents collapsing in flex/grid */
+  text-align: center;
+  margin: 10px;
+  border: 5px solid red;
+  width:30%;
+}
+
+.manganame{
+  width: 100%;
+}
