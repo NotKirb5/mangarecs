@@ -3,7 +3,7 @@ import requests
 import base64
 import time
 import main
-
+import json
 
 app = Flask(__name__)
 
@@ -24,7 +24,14 @@ def mangarecs():
     recdata = main.getRecs(userdata)
     return jsonify(recdata)
 
-
+@app.route('/api/fetchmanga')
+def fetchmanga():
+    id = request.args.get('id','')
+    resp = requests.get(f'https://api.mangadex.org/manga/{id}?includes[]=cover_art')
+    if resp.status_code == 200:
+        return jsonify(json.loads(resp.text))
+    else:
+        return jsonify({'error',resp.status_code})
 
 @app.route('/api/mangasearch')
 def mangasearch():

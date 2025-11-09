@@ -4,10 +4,16 @@ import json
 import time
 from mangadex.errors import ApiError
 import math
+from sentence_transformers import SentenceTransformer
+from numpy import dot
+from numpy.linalg import norm
+import numpy as np
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+
 auth = md.Auth()
-
 manga = md.Manga(auth=auth)
-
 tag = md.Tag()
 tagids = []
 for i in tag.tag_list():
@@ -261,4 +267,55 @@ def getRecs(data):
 
 
 
+def bert():
+    likeddesc = []
+    tagcount = {}
+    with open('manga.json','r') as f:
+        mangas = json.load(f)
+        for i in mangas:
+            id = manga.get_manga_list(title = i)[0].manga_id
+            r = requests.get(f'https://api.mangadex.org/manga/{id}?includes[]=cover_art')
+            data = json.loads(r.text)['data']
+            if len(list(data['attributes']['description'].keys())) != 0:
+
+                print(i,data['attributes']['description'][list(data['attributes']['description'].keys())[0]])
+                likeddesc.append(data['attributes']['description'][list(data['attributes']['description'].keys())[0]])
+            else:
+                print(f'{i} has no description')
+            tags = data['attributes']['tags']
+            for i in tags:
+                if i['id'] in tagids:
+                    try:
+                        tagcount[i['id']] += 1
+                    except KeyError:
+                        tagcount[i['id']] = 1
+    sortedlist = sorted(tagcount,key=tagcount.get,reverse=True)
+    liked_vectors = model.encode(likeddesc, normalize_embeddings=True)
+    testedmangas = {}
+    r = 0
+    while r<10000:
+        try:
+            for m in manga.get_manga_list(includedTags = [sortedlist[0]],limit = 100,offset=r):
+                if len(m.description.keys()) != 0:
+
+                    new_vector = model.encode(m.description[list(m.description.keys())[0]],normalize_embeddings=True)
+                    user_profile = np.mean(liked_vectors, axis=0)
+                    user_profile /= np.linalg.norm(user_profile)  # normalize
+
+                    # Cosine similarity
+                    similarity = np.dot(user_profile, new_vector)
+                    print(f"{m.title[list(m.title.keys())[0]]} Similarity: {similarity:.3f}")
+                    testedmangas[m.title[list(m.title.keys())[0]]] = similarity
+                else:
+                    print(f'no description for {m.title}')
+            r+=100
+        except ApiError:
+            print(f'api rate limit lol {r}')
+
+    sortedmangas = sorted(testedmangas,key=testedmangas.get,reverse=True)
+    print(sortedmangas[:100])
+
+
+
+bert()
 

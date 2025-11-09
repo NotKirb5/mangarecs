@@ -1,12 +1,13 @@
 const input = document.getElementById('mangainput');
 const suggestions = document.getElementById('suggestions');
 const liked = document.getElementById('liked');
+const recbox = document.getElementById('recs');
 let controller = null; // for aborting previous requests
 let mangadata = {
   'liked': [],
   'disliked': []
 }
-
+let fetchingdata = false
 
 let storeddata = localStorage.getItem('mangaData')
 
@@ -37,7 +38,7 @@ async function syncdata(){
       const cover = coverdata.url
       console.log(cover)
       const div = document.createElement('div');
-      div.className = 'mangasuggest'
+      div.className = 'manga'
       div.innerHTML = `
 
         <div class="manganame">${title}</div>
@@ -96,9 +97,8 @@ async function searchmanga(query){
         const res = await fetch(`api/mangacover?cover=${encodeURIComponent(coverid)}&id=${encodeURIComponent(manga.id)}`)
         const coverdata = await res.json()
         const cover = coverdata.url
-        console.log(cover)
         const div = document.createElement('div');
-        div.className = 'mangasuggest'
+        div.className = 'manga'
         div.innerHTML = `
 
           <div class="manganame">${title}</div>
@@ -106,7 +106,7 @@ async function searchmanga(query){
         `;
         div.onclick = () => {
           const newdiv = document.createElement('div');
-          newdiv.className = 'mangasuggest'
+          newdiv.className = 'manga'
           newdiv.innerHTML = `
 
           <div class="manganame">${title}</div>
@@ -142,8 +142,38 @@ input.addEventListener('input', async () => {
 
 
 async function getRecommendations(){
-  const response = await fetch(`/api/mangarecs?manga=${JSON.stringify(mangadata)}`)
-  const data = await response.json()
-  console.log(data)
+  if (!fetchingdata){
+    fetchingdata = true
+    const response = await fetch(`/api/mangarecs?manga=${JSON.stringify(mangadata)}`)
+    const data = await response.json()
+    console.log(data)
+    for (let i = 0;i<5;i++){
+      const manga = await fetch(`/api/fetchmanga?id=${encodeURIComponent(data.sortedlist[i])}`)
+      const mangadata = await manga.json()
+      console.log(mangadata)
+      let coverid = ''
+      for (let i = 0;i< mangadata.data.relationships.length;i++){
+         if (mangadata.data.relationships[i].type == 'cover_art'){
+
+          coverid = mangadata.data.relationships[i].id
+          break
+          }
+      }
+
+      const div = document.createElement('div')
+      const res = await fetch(`api/mangacover?cover=${encodeURIComponent(coverid)}&id=${encodeURIComponent(data.sortedlist[i])}`)
+      const coverdata = await res.json()
+      const cover = coverdata.url
+      div.className = 'manga'
+      const title = mangadata.data.attributes.title[Object.keys(mangadata.data.attributes.title)[0]]
+      div.innerHTML = `
+
+          <div class="manganame">${title}</div>
+          <img src="${cover}" alt="${title}" class="coverthumbnail">
+        `;
+      recbox.appendChild(div)
+    }
+  }
+ 
 }
 

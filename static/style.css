@@ -4,7 +4,7 @@
   display:block;
 }
 
-.mangasuggest{
+.manga{
   display: block;   /* prevents collapsing in flex/grid */
   text-align: center;
   margin: 10px;
