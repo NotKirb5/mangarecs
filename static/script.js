@@ -41,14 +41,11 @@ async function syncdata(){
       div.className = 'manga'
       div.innerHTML = `
 
-        <div class="manganame">${title}</div>
+        <div class="manganame" onclick="window.open('https://mangadex.org/title/${mangaid}','_blank')">${title}</div>
+        <div class="overlay"></div>
         <img src="${cover}" alt="${title}" class="coverthumbnail">
       `;
-      div.onclick = () => {
-        liked.removeChild(div)
-        mangadata.liked = mangadata.liked.filter(e => e !== title)
-        localStorage.setItem('mangaData',mangadata)
-      };
+      
       liked.appendChild(div);
     };
 

@@ -21,7 +21,7 @@ def singlemanga():
 @app.route('/api/mangarecs')
 def mangarecs():
     userdata = request.args.get('manga','')
-    recdata = main.getRecs(userdata)
+    recdata = main.bert(userdata)
     return jsonify(recdata)
 
 @app.route('/api/fetchmanga')

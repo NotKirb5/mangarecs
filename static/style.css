@@ -1,17 +1,52 @@
+body{
+  background-color:#5C4033;
+  color:#8E7CC3;
+}
+
+
 .coverthumbnail{
-  width:30%;
-  height:30%;
+  width:100%;
+  height:100%;
+  object-fit:cover;
   display:block;
 }
 
 .manga{
+  position:relative;
+  overflow:hidden;
   display: block;   /* prevents collapsing in flex/grid */
   text-align: center;
   margin: 10px;
-  border: 5px solid red;
-  width:30%;
+  border: 3px solid #D2B48C;
+  width:400px;
+  height: auto;
+  border-radius:10px;
+}
+.manga:hover {
+  transform: scale(1.05); /* grow 5% on hover */
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3); /* optional shadow for pop effect */
+}
+.manganame{
+  position:absolute;
+  width: 100%;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  z-index:2;
+  color:white;
+  font-size:1.5rem;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
 }
 
-.manganame{
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.3); /* black overlay at 30% opacity => dims 70% */
+  z-index: 1;
+}
+.liked{
+  display:flex;
 }
