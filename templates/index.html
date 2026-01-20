@@ -9,18 +9,30 @@
     <script src="{{ url_for('static',filename='script.js')}}" defer></script>
 </head>
 <body>
-  <h1>Search Manga</h1>
-  <input type="text" name="" value="" placeholder="type a manga here" id="mangainput">
-  <div id="suggestions" class='suggestions'>
-    
-  </div>
-  <h1>Liked Manga</h1>
-  <div id='liked' class='liked'>
+  <div class="container">
+      <div class='sidebar'>
+        <h1>Liked Manga</h1>
+          <div id='liked' class='liked'>
+            </div>
+
+      </div>
+
+      <div class='main'>
+        <h1>Search Manga</h1>
+            <div class='inputbox'>
+              <input type="text" name="" value="" placeholder="type a manga here" id="mangainput">
+              <div id="suggestions" class='suggestions'>
+          
+              </div>
+          
+            </div>
+                    <button type="" onclick={getRecommendations()} class="recbutton" id='recbutton'>Find Recomendations</button>
+
+          <h1>Reccommends</h1>
+          <div id='recs' class='recs'>
+              
+            </div>
+            </div>
     </div>
-    <button type="" onclick={getRecommendations()}>Find Recommendations</button>
-    <p>getting reccomendations takes awhile, especially with alot of data. Be patient.</p>
-  <div id='recs' class='recs'>
-      <h1>Reccommends</h1>
-      
-    </div>
+  
 </body>

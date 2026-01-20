@@ -36,9 +36,22 @@ def fetchmanga():
 @app.route('/api/mangasearch')
 def mangasearch():
     title = request.args.get('title','')
-    url = f'https://api.mangadex.org/manga?title={title}&limit=5'
+    liked = request.args.get('liked','')
+    if liked == '':
+        liked = []
+    url = f'https://api.mangadex.org/manga?title={title}&limit=15'
     response = requests.get(url)
-    return jsonify(response.json())
+    res = []
+    r = json.loads(response.text)['data']
+    for m in r:
+        print(m)
+        if m['id'] in liked:
+            
+            pass
+        else:
+            res.append(m)
+    print(f'returning {len(res)} manga')
+    return jsonify(res)
 
 cache = {}  # { key: { 'data_url': str, 'timestamp': float } }
 CACHE_TTL = 60 * 60  # 1 hour

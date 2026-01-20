@@ -1,8 +1,36 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body{
   background-color:#5C4033;
   color:#8E7CC3;
+  font-family: "Mochiy Pop One", sans-serif;
+  overflow-x:hidden;
 }
 
+.container{
+  display:flex;
+  min-height:100vh;
+}
+
+.main{
+  flex:1;
+  padding:10px;
+  background-color:#5C4033;
+}
+
+
+.sidebar{
+  width: 250px;
+  background-color: #8E7CC3;
+  color: #5C4033;
+  padding: 20px;
+  height: 100vh;
+  overflow-y: auto;
+}
 
 .coverthumbnail{
   width:100%;
@@ -12,20 +40,31 @@ body{
 }
 
 .manga{
+  flex:0 0 auto;
   position:relative;
   overflow:hidden;
   display: block;   /* prevents collapsing in flex/grid */
   text-align: center;
-  margin: 10px;
+  margin: 2px;
   border: 3px solid #D2B48C;
-  width:400px;
+  width:80%;
   height: auto;
   border-radius:10px;
+  transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1),
+              box-shadow 0.2s ease; /* smoother easing curve */
+  will-change: transform; /* helps the browser optimize animation */
 }
 .manga:hover {
   transform: scale(1.05); /* grow 5% on hover */
   box-shadow: 0 10px 20px rgba(0,0,0,0.3); /* optional shadow for pop effect */
 }
+
+
+.manga.rec{
+  width:20%;
+
+}
+
 .manganame{
   position:absolute;
   width: 100%;
@@ -36,6 +75,7 @@ body{
   color:white;
   font-size:1.5rem;
   text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+  text-wrap:balance;
 }
 
 .overlay {
@@ -48,5 +88,112 @@ body{
   z-index: 1;
 }
 .liked{
+  padding-top:10px;
+  padding-bottom:10px;
+  max-width: 100vw;
   display:flex;
+  flex-direction:column;
+  width:100%;
+  align-items:center;
+  overflow-x: hidden;    /* enables horizontal scroll */
+  overflow-y: hidden;  /* optional: hides vertical scroll */
+  white-space: nowrap; /* prevents line breaks */
+
+}
+
+.recbutton{
+  position:relative;
+  left:30%;
+  overflow:hidden;
+  width:40%;
+  font-size:1.5rem;
+  text-wrap:nowrap;
+  border-radius:25px;
+  background-color:#3B2F2F;
+  border:3px solid #D2B48C;
+  color:#BFA05A;
+  padding:5px;
+  margin-top:5px;
+  margin-bottom:5px;
+}
+
+.recbutton:hover{
+  background-color:#C47E38;
+  color:#C4A3E0;
+  transition: background-color 0.3s ease;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+}
+
+.recs{
+  padding-top:10px;
+  padding-bottom:10px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  height:70vh;
+  overflow-y:auto;
+  border:2px solid #D2B48C;
+  border-radius:10px;
+}
+
+.suggestions{
+  display:none;
+  position:absolute;
+  top:100%;
+  left: 25%;
+  right: 25%;
+  background-color:#3B2F2F;
+  border:1px solid #D2B48C;
+  border-top:none;
+  border-radius:30px;
+  border-top-left-radius:0px;
+  border-top-right-radius:0px;
+  max-height:300px;
+  width: 50%;
+  overflow-y:auto;
+  z-index:10;
+  font-weight:bold;
+}
+
+.suggestions.active{
+  display:block;
+}
+
+.options{
+  padding:10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+}
+
+.options:hover{
+  background-color:#C47E38;
+  color:#C4A3E0;
+}
+
+h1{
+  text-align:center;
+  margin:10px;
+}
+
+#mangainput{
+  width: 50%;
+  height:30px;
+  padding:5px;
+  border-radius:10px;
+  border:3px solid #D2B48C;
+  background-color:#3B2F2F;
+  color:#BFA05A;
+  font-size:1.5rem;
+
+}
+
+.inputbox{
+  margin:10px;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  align-items:center;
 }
